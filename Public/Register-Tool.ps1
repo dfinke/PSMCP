@@ -33,7 +33,13 @@ function Register-Tool {
     $tools = @(
         foreach ($f in $FunctionName) {
             Write-Verbose "Registering tool $f"
-            Get-OAIFunctionCallSpec $f -Strict:$Strict -ParameterSet $ParameterSet -MCP:$MCP
+
+            if ($MCP) {
+                Get-MCPFunctionCallSpec -CmdletName $f -Strict:$Strict -ParameterSet $ParameterSet
+            }
+            else {
+                Get-OAIFunctionCallSpec -CmdletName $f -Strict:$Strict -ParameterSet $ParameterSet
+            }
         }
     )
     $tools
