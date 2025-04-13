@@ -27,12 +27,13 @@ function Register-Tool {
         [string[]]
         $FunctionName,
         $ParameterSet = 0,
-        [Switch]$Strict
+        [Switch]$Strict,
+        [Switch]$MCP
     )
     $tools = @(
         foreach ($f in $FunctionName) {
             Write-Verbose "Registering tool $f"
-            Get-OAIFunctionCallSpec $f -Strict:$Strict -ParameterSet $ParameterSet
+            Get-OAIFunctionCallSpec $f -Strict:$Strict -ParameterSet $ParameterSet -MCP:$MCP
         }
     )
     $tools
