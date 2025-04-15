@@ -24,23 +24,23 @@ function Register-Tool {
     [CmdletBinding()]
     param(
         [parameter(Mandatory)]
-        [string[]]
-        $FunctionName,
+        [string[]]$FunctionName,
         $ParameterSet = 0,
         [Switch]$Strict,
         [Switch]$MCP
     )
-    $tools = @(
-        foreach ($f in $FunctionName) {
-            Write-Verbose "Registering tool $f"
 
-            if ($MCP) {
-                Get-MCPFunctionCallSpec -CmdletName $f -Strict:$Strict -ParameterSet $ParameterSet
-            }
-            else {
-                Get-OAIFunctionCallSpec -CmdletName $f -Strict:$Strict -ParameterSet $ParameterSet
+    $tools = @(        
+        if ($MCP) {
+            Get-MCPFunctionCallSpec $FunctionName -ParameterSet $ParameterSet
+        }
+        else {
+            foreach ($f in $FunctionName) {
+                Write-Verbose "Registering tool $f"
+                Get-OAIFunctionCallSpec $f -Strict:$Strict -ParameterSet $ParameterSet
             }
         }
     )
+
     $tools
 }

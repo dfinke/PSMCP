@@ -1,7 +1,3 @@
-
-# Get the directory where the module manifest is located
-$PSScriptRoot = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
-
 # Construct the path to the Public directory
 $PublicPath = Join-Path -Path $PSScriptRoot -ChildPath 'Public'
 
@@ -23,6 +19,3 @@ if (Test-Path -Path $PublicPath -PathType Container) {
 else {
     Write-Warning "Public directory not found at path: $PublicPath"
 }
-
-# Export any functions or variables you want to make available from the module
-# Example: Export-ModuleMember -Function Get-MyFunction -Variable MyVariable
