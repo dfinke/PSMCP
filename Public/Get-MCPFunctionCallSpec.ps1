@@ -55,7 +55,6 @@ function Get-MCPFunctionCallSpec {
             properties = [ordered]@{}
             required   = @()
         }
-        $paramError = $false
         foreach ($Parameter in $Parameters) {
             $typeName = $Parameter.ParameterType.Name.ToLower()
             switch ($typeName) {
@@ -70,16 +69,10 @@ function Get-MCPFunctionCallSpec {
                 $paramHelp = (Get-Help $CommandInfo.Name -Parameter $Parameter.Name -ErrorAction Stop).Description.Text | Out-String
             }
             catch { $paramHelp = $null }
-            $paramHelp = $paramHelp ? $paramHelp.Trim() : $null
-            if (-not $paramHelp) {
-                Write-Error "Parameter '$($Parameter.Name)' of function '$fn' does not have a description in comment-based help. Aborting." -ErrorAction Stop
-                $paramError = $true
-                break
-            }
+            $paramHelp = $paramHelp ? $paramHelp.Trim() : "No description available for this parameter."
             $inputSchema.properties[$Parameter.Name] = @{ type = $type; description = $paramHelp }
             $inputSchema.required += $Parameter.Name
         }
-        if ($paramError) { continue }
 
         # Set returns to use the function's description
         $returns = @{ type = 'string'; description = $description }
