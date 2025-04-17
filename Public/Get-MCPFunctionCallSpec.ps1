@@ -71,7 +71,9 @@ function Get-MCPFunctionCallSpec {
             catch { $paramHelp = $null }
             $paramHelp = $paramHelp ? $paramHelp.Trim() : "No description available for this parameter."
             $inputSchema.properties[$Parameter.Name] = @{ type = $type; description = $paramHelp }
-            $inputSchema.required += $Parameter.Name
+            if ($Parameter.IsMandatory) {
+                $inputSchema.required += $Parameter.Name
+            }
         }
 
         # Set returns to use the function's description
