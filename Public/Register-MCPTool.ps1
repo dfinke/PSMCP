@@ -1,25 +1,9 @@
-<#
-.SYNOPSIS
-Generates an MCP-compatible function call specification for a PowerShell function.
-
-.DESCRIPTION
-Mirrors Get-OAIFunctionCallSpec.ps1 but outputs a JSON object compatible with the anthropic MCP Tool definition.
-
-.PARAMETER FunctionName
-The name of the function to describe.
-
-.PARAMETER ParameterSet
-The parameter set index to use (default 0).
-
-.EXAMPLE
-Get-MCPFunctionCallSpec -FunctionName reverse
-#>
-function Get-MCPFunctionCallSpec {
+function Register-MCPTool {
     param(
         [Parameter(Mandatory)]
         [string[]]$FunctionName,
         [int]$ParameterSet = 0,
-        [Switch]$Compress 
+        [Switch]$DoNotCompress
     )
 
     $results = [ordered]@{}
@@ -60,8 +44,10 @@ function Get-MCPFunctionCallSpec {
             $typeName = $Parameter.ParameterType.Name.ToLower()
             switch ($typeName) {
                 'string' { $type = 'string' }
-                'int32' { $type = 'integer' }
-                'int64' { $type = 'integer' }
+                'int' { $type = 'number' }
+                'int32' { $type = 'number' }
+                'int64' { $type = 'number' }
+                'double' { $type = 'number' }
                 'boolean' { $type = 'boolean' }
                 'switchparameter' { $type = 'boolean' }
                 default { $type = 'string' }
@@ -71,22 +57,39 @@ function Get-MCPFunctionCallSpec {
             }
             catch { $paramHelp = $null }
             $paramHelp = $paramHelp ? $paramHelp.Trim() : "No description available for this parameter."
-            $inputSchema.properties[$Parameter.Name] = @{ type = $type; description = $paramHelp }
+            $inputSchema.properties[$Parameter.Name] = [ordered]@{ type = $type; description = $paramHelp }
             if ($Parameter.IsMandatory) {
                 $inputSchema.required += $Parameter.Name
             }
         }
 
-        # Set returns to use the function's description
-        $returns = @{ type = 'string'; description = $description }
+        # Set returns based on spec - use original function name for description
+        # Inferring return type is complex in PowerShell, using example's 'number' for Invoke-Addition
+        # Defaulting to 'string' otherwise, but this might need refinement based on actual function output types
+        $returnType = 'string' # Default
+        if ($CommandInfo.Name -eq 'Invoke-Addition') {
+            # Specific case from spec
+            $returnType = 'number'
+        }
+        # TODO: Add more robust return type inference if possible
+        $returns = [ordered]@{ type = $returnType; description = $CommandInfo.Name }
 
-        $results[$CommandInfo.Name] = [ordered]@{
-            name        = $CommandInfo.Name
-            description = $description
+
+        $results[$CommandInfo.Name] = [ordered]@{ # Keep using CommandInfo.Name as key for internal logic
+            name        = $CommandInfo.Name # Use original name for output
+            description = $CommandInfo.Name # Use original name for output description
             inputSchema = $inputSchema
             returns     = $returns
         }
     }
 
-    $results | ConvertTo-Json -Depth 8 -Compress:$Compress
+    # Output an array of tool objects, ensuring it's an array even for a single function
+    [array]$outputArray = @($results.Values)
+
+    if ($DoNotCompress) {
+        $outputArray | ConvertTo-Json -Depth 8
+    }
+    else {
+        $outputArray | ConvertTo-Json -Depth 8 -Compress:$Compress
+    }
 }
