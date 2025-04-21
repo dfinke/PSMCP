@@ -18,7 +18,7 @@ Describe "Register-MCPTool" {
 
     It "Should return JSON for Invoke-Addition in an MCP server " {
         $expectedOutput = @"
-{"name":"Invoke-Addition","description":"Invoke-Addition","inputSchema":{"type":"object","properties":{"Number1":{"type":"number","description":"The first number to add."},"Number2":{"type":"number","description":"The second number to add."}},"required":["Number1","Number2"]},"returns":{"type":"number","description":"Invoke-Addition"}}
+{"name":"Invoke-Addition","description":"Invoke-Addition","inputSchema":{"type":"object","properties":{"Number1":{"type":"number","description":"The first number to add."},"Number2":{"type":"number","description":"The second number to add."}},"required":["Number1","Number2"]},"returns":{"type":"string","description":"Invoke-Addition"}}
 "@
 
         $actualOutput = Register-MCPTool -FunctionName Invoke-Addition
@@ -27,7 +27,7 @@ Describe "Register-MCPTool" {
 
     It "Should return JSON for Invoke-Greet and Invoke-Addition in an MCP server " {
         $expectedOutput = @"
-[{"name":"Invoke-Greet","description":"Invoke-Greet","inputSchema":{"type":"object","properties":{"Name":{"type":"string","description":"The name of the user to greet."}},"required":["Name"]},"returns":{"type":"string","description":"Invoke-Greet"}},{"name":"Invoke-Addition","description":"Invoke-Addition","inputSchema":{"type":"object","properties":{"Number1":{"type":"number","description":"The first number to add."},"Number2":{"type":"number","description":"The second number to add."}},"required":["Number1","Number2"]},"returns":{"type":"number","description":"Invoke-Addition"}}]
+[{"name":"Invoke-Greet","description":"Invoke-Greet","inputSchema":{"type":"object","properties":{"Name":{"type":"string","description":"The name of the user to greet."}},"required":["Name"]},"returns":{"type":"string","description":"Invoke-Greet"}},{"name":"Invoke-Addition","description":"Invoke-Addition","inputSchema":{"type":"object","properties":{"Number1":{"type":"number","description":"The first number to add."},"Number2":{"type":"number","description":"The second number to add."}},"required":["Number1","Number2"]},"returns":{"type":"string","description":"Invoke-Addition"}}]
 "@
 
         $actualOutput = Register-MCPTool -FunctionName Invoke-Greet, Invoke-Addition

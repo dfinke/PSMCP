@@ -10,10 +10,10 @@ function Global:Invoke-Addition {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
-        [int]$Number1,
+        [double]$Number1,
 
         [Parameter(Mandatory = $true)]
-        [int]$Number2
+        [double]$Number2
     )
 
     return $Number1 + $Number2

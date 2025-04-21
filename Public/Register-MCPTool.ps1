@@ -42,12 +42,9 @@ function Register-MCPTool {
         }
         foreach ($Parameter in $Parameters) {
             $typeName = $Parameter.ParameterType.Name.ToLower()
-            switch ($typeName) {
+            switch -Regex ($typeName) {
                 'string' { $type = 'string' }
-                'int' { $type = 'number' }
-                'int32' { $type = 'number' }
-                'int64' { $type = 'number' }
-                'double' { $type = 'number' }
+                'int|int32|int64|double' { $type = 'number' }
                 'boolean' { $type = 'boolean' }
                 'switchparameter' { $type = 'boolean' }
                 default { $type = 'string' }
@@ -67,11 +64,7 @@ function Register-MCPTool {
         # Inferring return type is complex in PowerShell, using example's 'number' for Invoke-Addition
         # Defaulting to 'string' otherwise, but this might need refinement based on actual function output types
         $returnType = 'string' # Default
-        if ($CommandInfo.Name -eq 'Invoke-Addition') {
-            # Specific case from spec
-            $returnType = 'number'
-        }
-        # TODO: Add more robust return type inference if possible
+
         $returns = [ordered]@{ type = $returnType; description = $CommandInfo.Name }
 
 
