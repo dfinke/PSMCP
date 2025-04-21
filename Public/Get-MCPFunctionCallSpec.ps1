@@ -18,7 +18,8 @@ function Get-MCPFunctionCallSpec {
     param(
         [Parameter(Mandatory)]
         [string[]]$FunctionName,
-        [int]$ParameterSet = 0
+        [int]$ParameterSet = 0,
+        [Switch]$Compress 
     )
 
     $results = [ordered]@{}
@@ -87,5 +88,5 @@ function Get-MCPFunctionCallSpec {
         }
     }
 
-    $results | ConvertTo-Json -Depth 8
+    $results | ConvertTo-Json -Depth 8 -Compress:$Compress
 }

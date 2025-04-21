@@ -27,12 +27,13 @@ function Register-Tool {
         [string[]]$FunctionName,
         $ParameterSet = 0,
         [Switch]$Strict,
-        [Switch]$MCP
+        [Switch]$MCP,
+        [Switch]$Compress
     )
 
     $tools = @(        
         if ($MCP) {
-            Get-MCPFunctionCallSpec $FunctionName -ParameterSet $ParameterSet
+            Get-MCPFunctionCallSpec $FunctionName -ParameterSet $ParameterSet -Compress:$Compress
         }
         else {
             foreach ($f in $FunctionName) {
