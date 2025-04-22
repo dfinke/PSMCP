@@ -38,8 +38,6 @@ Describe 'New-MCP' -Tag New-MCP {
         ($actual | ConvertFrom-Json -Depth 10 | ConvertTo-Json -Depth 10 -Compress) | Should -Be ($expectedResults | ConvertFrom-Json -Depth 10 | ConvertTo-Json -Depth 10 -Compress )
 
         $serverFileContent = @'
-#Import-Module D:\mygit\PSMCP\PSMCP.psd1 -Force
-
 <#
 .SYNOPSIS
     Adds two numbers together.
@@ -65,6 +63,12 @@ function Global:Invoke-Addition {
 }
 
 $toolsListJson = Register-MCPTool Invoke-Addition
+
+
+
+
+
+
 
 function Write-Log {
     param(
