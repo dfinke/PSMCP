@@ -1,4 +1,4 @@
-Import-Module D:\mygit\PSMCP\PSMCP.psd1 -Force
+#Import-Module D:\mygit\PSMCP\PSMCP.psd1 -Force
 
 <#
 .SYNOPSIS
