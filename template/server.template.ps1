@@ -1,5 +1,3 @@
-#Import-Module D:\mygit\PSMCP\PSMCP.psd1 -Force
-
 <#
 .SYNOPSIS
     Adds two numbers together.
@@ -25,6 +23,12 @@ function Global:Invoke-Addition {
 }
 
 $toolsListJson = Register-MCPTool Invoke-Addition
+
+
+
+
+
+
 
 function Write-Log {
     param(
