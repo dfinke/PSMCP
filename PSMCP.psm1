@@ -19,3 +19,12 @@ if (Test-Path -Path $PublicPath -PathType Container) {
 else {
     Write-Warning "Public directory not found at path: $PublicPath"
 }
+
+#$script:logFile = "$((Get-Location).Path)\mcp_server.log"
+#$script:logFile = "$PSScriptRoot\mcp_server.log"
+$script:logFile = "D:\testmcp\mcp_server.log"
+
+function Set-LogFile {
+    param([string]$Path)
+    $script:logFile = $Path
+}
