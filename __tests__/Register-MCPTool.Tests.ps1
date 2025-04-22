@@ -2,9 +2,14 @@ Describe "Register-MCPTool" {
     BeforeAll {
         Import-Module $PSScriptRoot\..\PSMCP.psd1 -Force
 
+        Set-LogFile TestDrive:\mcp_server.log
+        
         . $PSScriptRoot/sampleFunctions/Invoke-Greet.ps1
         . $PSScriptRoot/sampleFunctions/Invoke-Addition.ps1
-    } 
+    }
+    AfterAll {
+        Remove-Item -Recurse -Force TestDrive:\
+    }
 
     It "Should return JSON for Invoke-Greet in an MCP server " {
         $expectedOutput = @"
