@@ -1,3 +1,5 @@
+#Requires -Module PSMCP
+
 Set-LogFile "$PSScriptRoot\mcp_server.log"
 
 <#
