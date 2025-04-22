@@ -4,7 +4,7 @@ Describe 'New-MCP' -Tag New-MCP {
     }
 
     AfterAll {
-        Remove-Item -Recurse -Force TestDrive:\        
+        Remove-Item -Recurse -Force TestDrive:\
     }
 
     It "Should create the stuff on the testdrive" {
@@ -38,6 +38,8 @@ Describe 'New-MCP' -Tag New-MCP {
         ($actual | ConvertFrom-Json -Depth 10 | ConvertTo-Json -Depth 10 -Compress) | Should -Be ($expectedResults | ConvertFrom-Json -Depth 10 | ConvertTo-Json -Depth 10 -Compress )
 
         $serverFileContent = @'
+#Requires -Module PSMCP
+
 Set-LogFile "$PSScriptRoot\mcp_server.log"
 
 <#
