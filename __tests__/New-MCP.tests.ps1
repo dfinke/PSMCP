@@ -38,6 +38,8 @@ Describe 'New-MCP' -Tag New-MCP {
         ($actual | ConvertFrom-Json -Depth 10 | ConvertTo-Json -Depth 10 -Compress) | Should -Be ($expectedResults | ConvertFrom-Json -Depth 10 | ConvertTo-Json -Depth 10 -Compress )
 
         $serverFileContent = @'
+Set-LogFile "$PSScriptRoot\mcp_server.log"
+
 <#
 .SYNOPSIS
     Adds two numbers together.
@@ -70,17 +72,6 @@ $toolsListJson = Register-MCPTool Invoke-Addition
 
 
 
-function Write-Log {
-    param(
-        [Parameter(Mandatory = $true)]
-        [object]$LogEntry # Changed parameter to accept an object (e.g., Hashtable or PSObject)
-    )
-    $logFile = "$PSScriptRoot\mcp_server.log"
-    # Add a timestamp to the log entry
-    $logObject = $LogEntry | Select-Object *, @{Name = 'Timestamp'; Expression = { (Get-Date -Format 'o') } }
-    # Convert the object to a JSON string and append to the log file
-    $logObject | ConvertTo-Json -Depth 10 -Compress | Add-Content -Path $logFile
-}
 
 function Invoke-HandleRequest {
     param([object]$request)
