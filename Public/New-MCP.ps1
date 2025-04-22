@@ -59,23 +59,49 @@ function New-MCP {
     }
 
     process {
-        # 1. Create server directory
-        if (Test-Path -Path $TargetDirectory -PathType Container) {
+        $directoryExisted = Test-Path -Path $TargetDirectory -PathType Container
+        $containsMcpFiles = $false
+        $isEmpty = $false
+
+        if ($directoryExisted) {
             Write-Verbose "Directory '$TargetDirectory' already exists."
-            if (-not $Force) {
-                Write-Warning "Directory '$TargetDirectory' already exists. Use -Force to potentially overwrite contents."
-                # Continue to create files inside if they don't exist or if -Force is specified
+            # Check for specific MCP files
+            $containsMcpFiles = (Test-Path -Path $McpJsonPath -PathType Leaf) -or (Test-Path -Path $ServerScriptPath -PathType Leaf)
+            # Check if the directory is empty (ignoring hidden/system items potentially)
+            $isEmpty = (Get-ChildItem -Path $TargetDirectory -Force -ErrorAction SilentlyContinue | Measure-Object).Count -eq 0
+
+            if ($containsMcpFiles -and -not $Force) {
+                # It exists AND looks like an MCP project AND -Force is not used
+                Write-Error "Directory '$TargetDirectory' already contains MCP configuration files (mcp.json or $($ServerName).ps1). Use -Force to overwrite."
+                return # Stop execution
             }
+            # If it exists but is empty, or doesn't contain MCP files, or -Force is used, we proceed.
+            # Informational message will be printed after directory is confirmed/created.
         }
         else {
+            # Directory does not exist, create it
             if ($PSCmdlet.ShouldProcess($TargetDirectory, "Create directory")) {
-                New-Item -Path $TargetDirectory -ItemType Directory -Force:$Force | Out-Null # Use Force in case parent exists but target doesn't
+                New-Item -Path $TargetDirectory -ItemType Directory -Force:$Force | Out-Null
             }
             else {
-                # If user chose No for ShouldProcess on directory creation, stop
                 Write-Warning "Directory creation skipped by user."
                 return
             }
+        }
+
+        # --- Point where directory is guaranteed to exist ---
+
+        # Print informational message *before* creating/overwriting files
+        if ($directoryExisted) {
+            # Use $isEmpty here
+            if ($isEmpty -or !$containsMcpFiles) {
+                Write-Host "Initialized MCP project in existing directory '$TargetDirectory'."
+            } 
+            # If it contained MCP files and -Force was used, the file-level warnings/overwrites will occur.
+            # A specific message here might be redundant or slightly confusing depending on which files get overwritten.
+        }
+        else {
+            Write-Host "Initialized MCP project in new directory '$TargetDirectory'."
         }
 
         # 2. Create .vscode directory
@@ -140,11 +166,6 @@ function New-MCP {
             if ($PSCmdlet.ShouldProcess($ServerScriptPath, "Create file '$($ServerName).ps1'")) {
                 Set-Content -Path $ServerScriptPath -Value $templateContent
             }
-        }
-
-        # Output the directory info object if it was created or existed
-        if (Test-Path -Path $TargetDirectory -PathType Container) {
-            Get-Item -Path $TargetDirectory
         }
     }
 }
