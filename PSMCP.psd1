@@ -27,8 +27,10 @@
     # Functions to export from this module
     FunctionsToExport  = @(
         'Get-MCPTemplate'
-        'New-MCP' # Added New-MCP
+        'New-MCP'
         'Register-MCPTool'
+        'Set-LogFile'
+        'Write-Log'
     )
 
     # Aliases to export from this module
