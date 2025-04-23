@@ -27,9 +27,11 @@
     # Functions to export from this module
     FunctionsToExport  = @(
         'Get-MCPTemplate'
+        'Invoke-HandleRequest'
         'New-MCP'
         'Register-MCPTool'
         'Set-LogFile'
+        'Start-McpServer'
         'Write-Log'
     )
 
