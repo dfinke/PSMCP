@@ -1,4 +1,4 @@
-Describe "Register-MCPTool" -Skip {
+Describe "Register-MCPTool" {
     BeforeAll {
         Import-Module $PSScriptRoot\..\PSMCP.psd1 -Force
 
