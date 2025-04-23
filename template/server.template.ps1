@@ -26,6 +26,4 @@ function Global:Invoke-Addition {
     $a + $b
 }
 
-$toolsListJson = Register-MCPTool Invoke-Addition
-
-Start-McpServer $toolsListJson
+Start-McpServer Invoke-Addition
