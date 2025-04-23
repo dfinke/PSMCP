@@ -128,6 +128,7 @@ function New-MCP {
             "type": "stdio",
             "command": "pwsh",
             "args": [                
+                "-NoProfile",
                 "-Command",
                 "${workspaceFolder}\\{scriptname}.ps1"
             ]
