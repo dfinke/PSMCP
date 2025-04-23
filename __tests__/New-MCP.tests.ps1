@@ -1,3 +1,43 @@
+Describe 'New-MCP' -Tag New-MCP -Skip {
+    BeforeAll {
+        Import-Module $PSScriptRoot\..\PSMCP.psd1 -Force
+    }
+
+    AfterAll {
+        Remove-Item -Recurse -Force TestDrive:\
+    }
+
+    It "Should create the stuff on the testdrive" {
+        $testDrive = "TestDrive:"
+        $testPath = "$testDrive\DougFolder"
+        mkdir $testPath -Force | Out-Null
+
+        $actual = New-MCP -Path $testPath -Force
+
+        Test-Path "$testPath\.vscode" | Should -Be $true 
+        Test-Path "$testPath\.vscode\mcp.json" | Should -Be $true
+        Test-Path "$testPath\MCPServer.ps1" | Should -Be $true 
+        
+        #Get-Content "$testPath\.vscode\mcp.json" | Out-Host
+        $expectedResults = @'
+{
+    "servers": {
+        "mcp-powershell-MCPServer": {
+            "type": "stdio",
+            "command": "pwsh",
+            "args": [
+                "-Command",
+                "${workspaceFolder}\\MCPServer.ps1"
+            ]
+        }
+    }
+}
+'@
+        $actual = Get-Content "$testPath\.vscode\mcp.json" -Raw
+
+        ($actual | ConvertFrom-Json -Depth 10 | ConvertTo-Json -Depth 10 -Compress) | Should -Be ($expectedResults | ConvertFrom-Json -Depth 10 | ConvertTo-Json -Depth 10 -Compress )
+
+        $serverFileContent = @'
 #Requires -Module PSMCP
 
 Set-LogFile "$PSScriptRoot\mcp_server.log"
@@ -18,10 +58,10 @@ Set-LogFile "$PSScriptRoot\mcp_server.log"
 function Global:Invoke-Addition {
     param(
         [Parameter(Mandatory)]
-        [double]$a, 
+        [double]$a,
         [Parameter(Mandatory)]
         [double]$b
-    ) 
+    )
 
     $a + $b
 }
@@ -130,5 +170,17 @@ while ($true) {
     catch {
         # Handle JSON parsing errors or other issues reading input
         # Log error appropriately, maybe return a JSON-RPC error response if possible
+    }
+}
+'@
+
+        $expectedLines = $serverFileContent -split "`r?`n"
+        $fileLines = Get-Content "$testPath\MCPServer.ps1" 
+
+        $fileLines.Count | Should -Be $expectedLines.Count
+
+        for ($i = 0; $i -lt $expectedLines.Count; $i++) {
+            $fileLines[$i].Trim() | Should -Be $expectedLines[$i].Trim()
+        }
     }
 }
