@@ -24,15 +24,21 @@ function New-MCP {
             Write-Verbose "No -Path specified, using current directory: $TargetDirectoryPath"
         }
         else {
-            # If Path is specified, resolve it
-            $TargetDirectoryPath = $Path
+            # If Path is specified, check if it's an absolute path or a special path like TestDrive:
+            if ([System.IO.Path]::IsPathRooted($Path) -or $Path -like "TestDrive:*") {
+                $TargetDirectoryPath = $Path
+            }
+            else {
+                # If not absolute, resolve it relative to the current directory
+                $TargetDirectoryPath = Join-Path -Path (Get-Location).Path -ChildPath $Path
+            }
         }
 
         # Resolve the final target directory path
         $TargetDirectory = Resolve-Path -Path $TargetDirectoryPath -ErrorAction SilentlyContinue
         if (-not $TargetDirectory) {
             # If path doesn't exist after resolving, treat it as a new directory to be created
-            $TargetDirectory = Join-Path -Path (Get-Location).Path -ChildPath $TargetDirectoryPath # Use original path specifier for joining
+            $TargetDirectory = $TargetDirectoryPath
             Write-Verbose "Target directory '$TargetDirectory' does not exist. It will be created."
         }
         elseif (Test-Path -Path $TargetDirectory -PathType Leaf) {
