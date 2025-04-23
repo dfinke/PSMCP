@@ -1,7 +1,15 @@
 function Start-McpServer {
     param(
-        [string]$toolsListJson
+        [string[]]$Tools
     )
+
+    # Check if the tools are provided
+    if (-not $Tools) {
+        Write-Log -LogEntry @{ Level = 'Error'; Message = "No tools provided to Start-McpServer" }
+        return
+    }
+    # Convert the tools list to JSON format
+    $toolsListJson = Register-MCPTool $Tools
 
     Write-Log -LogEntry @{ Level = 'Info'; Message = "Starting MCP Server" }
     while ($true) {
