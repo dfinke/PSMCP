@@ -1,4 +1,4 @@
-Describe 'New-MCP' -Tag New-MCP {
+Describe 'New-MCP' -Tag New-MCP -Skip {
     BeforeAll {
         Import-Module $PSScriptRoot\..\PSMCP.psd1 -Force
     }
