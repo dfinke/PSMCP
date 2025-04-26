@@ -57,7 +57,7 @@ PowerShell Model Control Protocol (PSMCP) - Turn PowerShell functions into AI to
             Category     = "PowerShell MCP AI"
 
             # Keyword tags to help users find this module via navigations and search.
-            Tags         = @("PowerShell", "MCP", "AI", "VS Code")
+            Tags         = @("PowerShell", "MCP", "AI", "VSCode")
 
             # The web address of an icon which can be used in galleries to represent this module
             #IconUri = 
