@@ -3,11 +3,12 @@ on:
     branches:
       - main    
   pull_request:
-  permissions:
-    contents: write
+
 jobs:
   validate:
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
     strategy:
       matrix:
         # os: [windows-latest, ubuntu-latest, macos-latest]
