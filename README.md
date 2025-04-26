@@ -10,6 +10,21 @@ PowerShell Model Context Protocol (PSMCP) bridges the gap between your code and 
 No YAML, no friction. Just prompts, tools, and instant execution.
 It's not automation. It's collaboration.
 
+## In Action
+🔧 What you'll see:
+
+☑️Using New-MCP to scaffold a working AI server
+
+☑️Integration with GitHub Copilot in Agent Mode
+
+☑️Live demo: Add a PowerShell function, restart the server, and the AI just knows
+
+This isn’t just code—it’s a conversation.
+
+ <a href="https://youtu.be/S_JQlFj9nak"><img src="https://img.youtube.com/vi/S_JQlFj9nak/0.jpg" width="400"></a>
+
+----
+
 ## Install PSMCP
 
 ```
