@@ -1,8 +1,14 @@
-# PowerShell MCP - PSMCP
-
 <p align="center">
     <img src="media/mcp-logo.png" alt="alt text" width="250" height="250"/>
 </p>
+
+# PowerShell MCP - PSMCP
+
+Transform your PowerShell scripts into intelligent, AI-driven services that respond to natural language. 
+PowerShell Model Context Protocol (PSMCP) bridges the gap between your code and large language models, enabling seamless AI-human-code collaboration without complex configuration.
+
+No YAML, no friction. Just prompts, tools, and instant execution.
+It's not automation. It's collaboration.
 
 ## Install PSMCP
 
@@ -30,10 +36,7 @@ This guide walks you through setting up GitHub Copilot in Visual Studio Code. To
 
 ## Getting Started with PSMCP
 
-From script to service—no YAML, no friction. Just prompts, tools, and instant execution.
-It’s not automation. It’s collaboration.
-
-## New MCP
+### New MCP
 
 Start by creating a new MCP server with a simple command. This scaffolds the necessary files and sets the stage for dynamic AI interaction.
 
@@ -42,7 +45,7 @@ Start by creating a new MCP server with a simple command. This scaffolds the nec
 Once initialized, you're ready to configure your MCP tools—no YAML, no fuss.
 
 
-## MCP JSON
+### MCP JSON
 
 The JSON file defines your available tools. In this example, we’re creating a simple Invoke-Addition function.
 
@@ -58,7 +61,7 @@ With the tool registered, starting the server wires up everything under the hood
 
 The server is hot and listening. Now you can talk to your code like it’s a teammate.
 
-## Let's Prompt
+### Let's Prompt
 
 Time to interact. Drop a natural language prompt and let the AI figure out which function to use.
 
@@ -66,7 +69,7 @@ Time to interact. Drop a natural language prompt and let the AI figure out which
 
 Your intent is recognized—and the AI knows exactly what tool to invoke.
 
-## Copilot Wants to Run your function
+### Copilot Wants to Run your function
 
 Copilot steps in, proposing to call your registered function based on your prompt.
 
@@ -81,7 +84,7 @@ Peek under the hood—see the actual arguments passed to your function.
 
 Confirm to execute and let the AI orchestrate the rest.
 
-## After Run
+### After Run
 Execution complete. The function ran with your inputs, and now you get the result.
 
 ![alt text](media/07-AfterRun.png)
@@ -96,27 +99,28 @@ No more brittle glue code. No more hand-rolling APIs. Just describe what you wan
 Welcome to the future of coding.
 It’s not just execution—it’s collaboration.
 
-----
+## Contributing to PSMCP
 
+Contributions are welcomed from the community! Whether you're fixing bugs, adding features, improving documentation, or sharing examples, your help makes PSMCP better.
 
-https://json-schema.org/specification
+### How to Contribute
 
-## Use APIs as tools for your Agents with MCP
+1. **Fork the repository** - Create your own copy of the project to work with
+2. **Create a branch** - Make your changes in a new branch
+3. **Submit a pull request** - Once you're happy with your changes, submit a PR for review
+4. **Discuss and review** - Collaborate with maintainers to refine your contribution
+5. **Get merged** - Once approved, your changes will become part of PSMCP
 
-i like the multi server mcp json they have
+### Types of Contributions We're Looking For
 
-- https://www.youtube.com/watch?v=Xf5xxhT9ySs
+- Bug fixes and issue reports
+- New features and enhancements
+- Documentation improvements
+- Example scripts and usage scenarios
+- Performance optimizations
 
+Please ensure your code follows the project's style and includes appropriate tests.
 
-## Create a Custom MCP that Calls Cursor Tools
-- https://egghead.io/create-a-custom-mcp-that-calls-cursor-tools~r77sw
+For changes, please open an issue first to discuss what you would like to change.
 
-## Build Your First MCP Tool in Cursor in Just 2 Minutes
-- https://egghead.io/build-your-first-mcp-tool-in-cursor-in-just-2-minutes~i8kyo
-
-## Swiss Army Knife for MCP Servers
-https://github.com/f/mcptools
-
-## Agentic Coding MCPs
-
-https://gist.github.com/ruvnet/2e08d3ac9bf936fd867978aaa4f0d3c6
+Thank you to all our contributors who help make PSMCP better!
