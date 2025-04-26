@@ -22,7 +22,10 @@
 
     # Description of the functionality provided by this module
     Description        = @'
+PowerShell Model Control Protocol (PSMCP) - Turn PowerShell functions into AI tools. Let Copilot and LLMs execute your code via natural language. Seamless AI-code integration with zero complexity.
 '@
+
+    PowerShellVersion = '5.1'
 
     # Functions to export from this module
     FunctionsToExport  = @(
@@ -63,7 +66,7 @@
             ProjectUri   = "https://github.com/dfinke/PSMCP"
 
             # The web address of this module's license. Points to a page that's embeddable and linkable.
-            LicenseUri   = "https://github.com/dfinke/PSMCP/blob/master/LICENSE.txt"
+            LicenseUri   = "https://github.com/dfinke/PSMCP/blob/master/LICENSE"
 
             # Release notes for this particular version of the module
             #ReleaseNotes = $True
