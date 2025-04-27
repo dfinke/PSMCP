@@ -6,7 +6,7 @@
     RootModule         = 'PSMCP.psm1'
 
     # Version number of this module.
-    ModuleVersion      = '0.1.0'
+    ModuleVersion      = '0.1.1'
 
     # ID used to uniquely identify this module
     GUID               = 'e1c26df8-e796-466f-a542-ec72988e9d90'
