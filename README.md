@@ -34,20 +34,19 @@ New-MCP d:\temp\testMCP
 code-insiders d:\temp\testMCP
 ```
 
-## Install VS Code Insiders
+## Install VS Code 
 
-To use PSMCP effectively, you'll need VS Code Insiders. Here's how to install it:
+To use PSMCP effectively, you'll need VS Code v1.99.3 or later. Here's how to install it:
 
-1. Visit the [VS Code Insiders download page](https://code.visualstudio.com/insiders/)
+1. Visit the [VS Code download page](https://code.visualstudio.com/)
 2. Download the appropriate version for your operating system
 3. Run the installer and follow the on-screen instructions
 
-
 ## Set up GitHub Copilot in VS Code
+
 This guide walks you through setting up GitHub Copilot in Visual Studio Code. To use Copilot in VS Code, you need to have access to GitHub Copilot with your GitHub account.
 
 [GitHub Copilot Setup Guide](https://code.visualstudio.com/docs/copilot/setup)
-
 
 ## Getting Started with PSMCP
 
@@ -59,7 +58,6 @@ Start by creating a new MCP server with a simple command. This scaffolds the nec
 
 Once initialized, you're ready to configure your MCP tools—no YAML, no fuss.
 
-
 ### MCP JSON
 
 The JSON file defines your available tools. In this example, we’re creating a simple Invoke-Addition function.
@@ -69,8 +67,8 @@ The JSON file defines your available tools. In this example, we’re creating a 
 Clicking "Start" embeds the tool definition into the MCP config. Now it’s registered and ready to go.
 
 ## After Clicking Start
-With the tool registered, starting the server wires up everything under the hood.
 
+With the tool registered, starting the server wires up everything under the hood.
 
 ![alt text](media/03-Running.png)
 
@@ -93,6 +91,7 @@ Copilot steps in, proposing to call your registered function based on your promp
 Confirm to execute and let the AI orchestrate the rest.
 
 ## Expand the Run
+
 Peek under the hood—see the actual arguments passed to your function.
 
 ![alt text](media/06-ExpandRun.png)
@@ -100,11 +99,24 @@ Peek under the hood—see the actual arguments passed to your function.
 Confirm to execute and let the AI orchestrate the rest.
 
 ### After Run
+
 Execution complete. The function ran with your inputs, and now you get the result.
 
 ![alt text](media/07-AfterRun.png)
 
 This isn’t just code—it’s a conversation. One prompt, one response, and a world of automation opens up.
+
+## Creating your own Functions
+
+Edit the <yourMCPServerName.ps1> file adding your functions. 
+
+*TIPS:*
+
+- Write Help/Comments for your functions that describes what the function does, example(s) and outputs. This will help your MCP Client discover the capabilities and use the functions how you intended.
+- Make your Functions Global. (e.g. functionName Global:Get-myFunction {})
+- At the bottom of your <yourMCPServerName.ps1> add each function comma seperated so that they will be availabile in your MCP Client (e.g. VSCode)
+
+![alt text](media/08-CreatingYourOwnFunctions.png)
 
 🟨 Conclusion
 This workflow redefines how we build and run tools. From scaffolding an MCP server to interacting with it using plain language, the line between prompt and program is disappearing.
