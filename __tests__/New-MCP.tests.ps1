@@ -6,7 +6,7 @@ Describe 'New-MCP' -Tag New-MCP -Skip {
     AfterAll {
         Remove-Item -Recurse -Force TestDrive:\
     }
-
+    
     It "Should create the stuff on the testdrive" {
         $testDrive = "TestDrive:"
         $testPath = "$testDrive\DougFolder"
@@ -77,6 +77,18 @@ Start-McpServer Invoke-Addition
 
         for ($i = 0; $i -lt $expectedLines.Count; $i++) {
             $fileLines[$i].Trim() | Should -Be $expectedLines[$i].Trim()
+        }
+    }
+
+    It "Should have these params and in order" {
+        $expectedParams = 'Path', 'ServerName', 'template', 'Force'
+
+        $actualParams = (Get-Command New-MCP).Parameters.Keys
+
+        $actualParams.Count | Should -Be $expectedParams.Count
+
+        for ($i = 0; $i -lt $expectedParams.Count; $i++) {
+            $actualParams[$i] | Should -Be $expectedParams[$i]
         }
     }
 }
