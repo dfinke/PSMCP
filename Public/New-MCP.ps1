@@ -1,3 +1,13 @@
+Class TemplateNames : System.Management.Automation.IValidateSetValuesGenerator {
+    [String[]] GetValidValues() {
+        $templates = foreach ($template in Get-ChildItem $PSScriptRoot\..\template) {
+            $template.BaseName -replace '.template', ''
+        }
+        
+        return $templates
+    }
+}
+
 function New-MCP {
     [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType([System.IO.DirectoryInfo])]
@@ -9,6 +19,9 @@ function New-MCP {
         [Parameter()]
         [string]
         $ServerName = "MCPServer",
+
+        [ValidateSet([TemplateNames])]
+        [string]$template,
 
         [Parameter()]
         [switch]
@@ -57,7 +70,15 @@ function New-MCP {
         $ModuleRoot = Split-Path -Path $ScriptDirectory -Parent
 
         # Construct the template path
-        $TemplatePath = Join-Path -Path $ModuleRoot -ChildPath "template\server.template.ps1"
+
+        if (-not $template) {
+            $template = "server"
+        }
+        
+        $templatePath = "template\$($template).template.ps1"
+
+        # $TemplatePath = Join-Path -Path $ModuleRoot -ChildPath "template\server.template.ps1"
+        $TemplatePath = Join-Path -Path $ModuleRoot -ChildPath $templatePath
 
         if (-not (Test-Path -Path $TemplatePath -PathType Leaf)) {
             throw "Server template file not found at '$TemplatePath'."

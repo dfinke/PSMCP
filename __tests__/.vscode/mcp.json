@@ -1,0 +1,13 @@
+{
+    "servers": {
+        "mcp-powershell-MCPServer": {
+            "type": "stdio",
+            "command": "pwsh",
+            "args": [                
+                "-NoProfile",
+                "-Command",
+                "${workspaceFolder}\\MCPServer.ps1"
+            ]
+        }
+    }
+}
