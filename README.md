@@ -126,6 +126,25 @@ No more brittle glue code. No more hand-rolling APIs. Just describe what you wan
 Welcome to the future of coding.
 It’s not just execution—it’s collaboration.
 
+## Using Templates
+
+PSMCP allows you to start your MCP server project from predefined templates using the `-template` parameter with the `New-MCP` command. Templates provide a quick starting point with common configurations or specific functionalities.
+
+To use a template, simply specify its name when creating your MCP project:
+
+```powershell
+# Example using the 'youtube' template
+New-MCP -Path d:\\mygit\\MyYouTubeMCP -template youtube
+```
+
+This command will create a new MCP project in the specified path, using the `youtube.template.ps1` file as the basis for your `MCPServer.ps1`.
+
+Available templates include:
+- `server`: The default template, providing a basic server setup with an `Invoke-Addition` example function.
+- `youtube`: A template pre-configured for interacting with YouTube (requires the `PSAI` module).
+
+You can explore the available templates in the `template/` directory of the PSMCP module installation.
+
 ## Contributing to PSMCP
 
 Contributions are welcomed from the community! Whether you're fixing bugs, adding features, improving documentation, or sharing examples, your help makes PSMCP better.
