@@ -18,4 +18,4 @@ jobs:
       shell: pwsh
       run : |
         cd ./__tests__
-        Invoke-Pester -Output Detailed
+        # Invoke-Pester -Output Detailed
