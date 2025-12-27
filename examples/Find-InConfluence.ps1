@@ -290,11 +290,15 @@ function Search-PageByBodyContentInConfluence {
         "Accept" = "application/json"
     }
 
+    # escape user input for safe use in CQL string literals
+    $escapedSearchText = $searchText -replace "'", "''"
+    $escapedSpaceKey = if ($spaceKey) { $spaceKey -replace "'", "''" } else { $null }
+
     # create CQL
-    if ($spaceKey) {
-        $cql = "type=page AND text~'$searchText' AND space='$spaceKey'"
+    if ($escapedSpaceKey) {
+        $cql = "type=page AND text~'$escapedSearchText' AND space='$escapedSpaceKey'"
     } else {
-        $cql = "type=page AND text~'$searchText'"
+        $cql = "type=page AND text~'$escapedSearchText'"
     }
     
     $encodedCql = [System.Web.HttpUtility]::UrlEncode($cql)
