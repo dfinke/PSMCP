@@ -3,6 +3,11 @@ function Start-McpServer {
         [string[]]$Tools
     )
 
+    # Get parent process ID to monitor for disconnection
+    $currentProcess = Get-Process -Id $PID
+    $parentProcessId = $currentProcess.Parent.Id
+    Write-Log -LogEntry @{ Level = 'Info'; Message = "MCP Server started with PID: $PID, Parent PID: $parentProcessId" }
+
     # Check if the tools are provided
     if (-not $Tools) {
         Write-Log -LogEntry @{ Level = 'Error'; Message = "No tools provided to Start-McpServer" }
