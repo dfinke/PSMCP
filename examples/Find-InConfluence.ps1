@@ -50,14 +50,6 @@ function Get-SpaceByKeyInConfluence {
         $response | ConvertTo-Json
 
         
-        <#
-        @{ 
-            "Task code" = $response.key
-            "Task status" = $response.fields.status.name
-            "Task name" = $response.fields.summary
-            "Task description" = $response.fields.description
-        } | ConvertTo-Json
-        #>
     } catch {
         @{
             "Error" = "Failed to retrieve Confluence information"
