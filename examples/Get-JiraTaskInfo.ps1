@@ -10,6 +10,16 @@ function Get-JiraTaskInfo {
     # Define your PAT and API URL
     $token = [System.Environment]::GetEnvironmentVariable("JIRA_PAT", "User")
     $baseUrl = $env:JIRA_BASE_URL
+
+    # Validate required configuration values before making the API call
+    if ([string]::IsNullOrWhiteSpace($token) -or [string]::IsNullOrWhiteSpace($baseUrl)) {
+        @{
+            "Error" = "Missing Jira configuration"
+            "ErrorMessage" = "JIRA_PAT and/or JIRA_BASE_URL environment variables are not set or are empty."
+            "TaskCode" = $JiraTaskCode
+        } | ConvertTo-Json
+        return
+    }
     # Create the Authorization header with the Bearer token
     $headers = @{
         "Authorization" = "Bearer $token"
