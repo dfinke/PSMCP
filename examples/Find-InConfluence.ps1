@@ -240,7 +240,7 @@ function Get-ChildPagesInConfluence {
         
         $response.results | ForEach-Object {
             $item = $_
-            $item._links.webui = ($env:CONF_BASE_URL).replace("/rest/api",$page._links.webui)
+            $item._links.webui = ($env:CONF_BASE_URL).replace("/rest/api",$item._links.webui)
             $item
         } | ConvertTo-Json -Depth 10 | Write-Output
 
