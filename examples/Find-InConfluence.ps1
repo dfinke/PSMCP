@@ -97,7 +97,7 @@ function Get-PageIdByTitleInConfluence {
     if ($spaceKey) {
         $cql = "type=page AND title='$title' AND space='$spaceKey'"
     } else {
-        $cql = "type=page AND text='$title'"
+        $cql = "type=page AND title='$title'"
     }
 
     
