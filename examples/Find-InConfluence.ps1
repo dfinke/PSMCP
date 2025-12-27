@@ -19,6 +19,21 @@ function Get-SpaceByKeyInConfluence {
     # Define your PAT and API URL
     $token = ([System.Environment]::GetEnvironmentVariable("CONFL_PAT", "User"))
 
+    if ([string]::IsNullOrWhiteSpace($baseUrl)) {
+        @{
+            "Error" = "Configuration error"
+            "ErrorMessage" = "CONF_BASE_URL environment variable is not set or is empty."
+        } | ConvertTo-Json
+        return
+    }
+
+    if ([string]::IsNullOrWhiteSpace($token)) {
+        @{
+            "Error" = "Configuration error"
+            "ErrorMessage" = "CONFL_PAT environment variable is not set or is empty."
+        } | ConvertTo-Json
+        return
+    }
     $headers = @{
         "Authorization" = "Bearer $($token)"
         "Accept" = "application/json"
