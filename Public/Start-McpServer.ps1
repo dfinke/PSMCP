@@ -5,6 +5,10 @@ function Start-McpServer {
 
     # Get parent process ID to monitor for disconnection
     $currentProcess = Get-Process -Id $PID
+    if ($null -eq $currentProcess.Parent) {
+        Write-Log -LogEntry @{ Level = 'Error'; Message = "Current process has no parent process. Shutting down MCP server..." }
+        return
+    }
     $parentProcessId = $currentProcess.Parent.Id
     Write-Log -LogEntry @{ Level = 'Info'; Message = "MCP Server started with PID: $PID, Parent PID: $parentProcessId" }
 
