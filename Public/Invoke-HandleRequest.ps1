@@ -46,6 +46,19 @@ function Invoke-HandleRequest {
 
         $result = & $toolName @targetArgs
 
+        $resultText = if ($null -eq $result) {
+            ""
+        }
+        elseif ($result -is [string]) {
+            $result
+        }
+        elseif ($result -is [ValueType]) {
+            $result.ToString()
+        }
+        else {
+            $result | ConvertTo-Json -Depth 100
+        }
+
         # Log structured data
         Write-Log -LogEntry @{
             RequestId = $request.id
@@ -63,7 +76,7 @@ function Invoke-HandleRequest {
                 content = @(
                     [ordered]@{
                         type = "text"
-                        text = $result | Out-String
+                        text = $resultText
                     }
                 )
                 isError = $false
