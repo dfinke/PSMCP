@@ -56,7 +56,18 @@ function Invoke-HandleRequest {
             $result.ToString()
         }
         else {
-            $result | ConvertTo-Json -Depth 100
+            try {
+                $result | ConvertTo-Json -Depth 100
+            }
+            catch {
+                # Fallback to a safer string representation if JSON serialization fails
+                try {
+                    $result | Out-String
+                }
+                catch {
+                    $result.ToString()
+                }
+            }
         }
 
         # Log structured data
