@@ -44,33 +44,107 @@ function Invoke-HandleRequest {
         $toolName = $request.params.name
         $targetArgs = $request.params.arguments | ConvertTo-Json -Depth 10 | ConvertFrom-Json -Depth 10 -AsHashtable
 
-        $result = & $toolName @targetArgs
+        try {
+            # Redirect all streams (Error=2, Warning=3, Verbose=4, Debug=5, Information=6) to the
+            # output stream so they arrive in chronological order and can be logged by type
+            $rawOutput = & $toolName @targetArgs 2>&1 3>&1 4>&1 5>&1 6>&1
 
-        # Log structured data
-        Write-Log -LogEntry @{
-            RequestId = $request.id
-            Method    = $request.method
-            ToolName  = $toolName
-            Arguments = $targetArgs
-            Result    = $result
-            # FullRequest = $request # Optionally include the full request if needed, can be large
-        }
+            # Walk output in order — log stream records, collect actual output
+            $actualOutput = [System.Collections.Generic.List[object]]::new()
+            $hadErrors = $false
 
-        $response = [ordered]@{
-            jsonrpc = "2.0"
-            id      = $request.id
-            result  = @{
-                content = @(
-                    [ordered]@{
-                        type = "text"
-                        text = $result | Out-String
+            foreach ($item in $rawOutput) {
+                $level = $null
+                $stream = $null
+                $extra = @{}
+
+                switch ($item) {
+                    { $_.GetType().FullName -notmatch '^System\.Management\.Automation\.(Error|Warning|Verbose|Debug|Information)Record$' } {
+                        $actualOutput.Add($item); break
                     }
-                )
-                isError = $false
-            }
-        }
+                    { $_ -is [System.Management.Automation.ErrorRecord] } {
+                        $hadErrors = $true
+                        $level = 'Error'
+                        $stream = 'Error'
+                        $extra = @{ Category = $item.CategoryInfo.ToString() }
+                        break
+                    }
+                    { $_ -is [System.Management.Automation.WarningRecord] } { $level = 'Warn'; $stream = 'Warning'; break }
+                    { $_ -is [System.Management.Automation.VerboseRecord] } { $level = 'Verbose'; $stream = 'Verbose'; break }
+                    { $_ -is [System.Management.Automation.DebugRecord] } { $level = 'Debug'; $stream = 'Debug'; break }
+                    { $_ -is [System.Management.Automation.InformationRecord] } {
+                        $level = 'Info'
+                        $stream = 'Information'
+                        $extra = @{ Tags = ($item.Tags -join ',') }
+                        break
+                    }
+                }
 
-        return ($response | ConvertTo-Json -Depth 10 -Compress)
+                if ($level) {
+                    Write-Log -LogEntry (@{
+                            Level    = $level
+                            Message  = $item.ToString()
+                            ToolName = $toolName
+                            Stream   = $stream
+                        } + $extra)
+                }
+            }
+
+            Write-Log -LogEntry @{
+                Level     = 'Info'
+                RequestId = $request.id
+                Method    = $request.method
+                ToolName  = $toolName
+                Arguments = $targetArgs
+                Result    = ($actualOutput | Out-String)
+            }
+
+            $response = [ordered]@{
+                jsonrpc = "2.0"
+                id      = $request.id
+                result  = @{
+                    content = @(
+                        [ordered]@{
+                            type = "text"
+                            text = if ($hadErrors) {
+                                ($rawOutput | Where-Object { $_ -is [System.Management.Automation.ErrorRecord] } | ForEach-Object { $_.ToString() }) -join "`n"
+                            }
+                            else {
+                                $actualOutput | Out-String
+                            }
+                        }
+                    )
+                    isError = $hadErrors
+                }
+            }
+
+            return ($response | ConvertTo-Json -Depth 10 -Compress)
+        }
+        catch {
+            Write-Log -LogEntry @{
+                Level     = 'Error'
+                Message   = $_.Exception.Message
+                ToolName  = $toolName
+                Stream    = 'Exception'
+                Exception = $_.ToString()
+            }
+
+            $response = [ordered]@{
+                jsonrpc = "2.0"
+                id      = $request.id
+                result  = @{
+                    content = @(
+                        [ordered]@{
+                            type = "text"
+                            text = $_.Exception.Message
+                        }
+                    )
+                    isError = $true
+                }
+            }
+
+            return ($response | ConvertTo-Json -Depth 10 -Compress)
+        }
     }
 
     # Unknown Method Error
